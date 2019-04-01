@@ -1,0 +1,82 @@
+<!--div [hidden]="submitted">
+  <form (ngSubmit)="f.form.valid && onSubmit()"
+        #f="ngForm" novalidate>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="name">First Name</label>
+        <input type="text"
+               class="form-control"
+               id="name"
+               formControlName="name"
+               required
+               [(ngModel)]='empl.name'
+               name="name"
+               [pattern]="nameRegex">
+
+        <div *ngIf="f.submitted && name.invalid">
+          <div *ngIf="name.errors.required">Name is required</div>
+          <div *ngIf="name.errors.pattern">
+            Name is not valid.
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="lastName">Last Name</label>
+        <input type="text"
+               class="form-control"
+               id="lastName"
+               required
+               formControlName="lastName"
+               [(ngModel)]="empl.lastName"
+               name="lastName"
+               [pattern]="lastNameRegex">
+        <div *ngIf="f.submitted && lastName.invalid">
+          <div *ngIf="lastName.errors.required">Last name is required</div>
+          <div *ngIf="lastName.errors.pattern">
+            Name is not valid.
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="salary">Salary:</label>
+        <input type="text" class="form-control"
+               id="salary"
+               required
+               formControlName="salary"
+               [(ngModel)]="empl.salary"
+               name="salary">
+        <div *ngIf="f.submitted &&  salary.invalid">
+          <div *ngIf="salary.errors.required">salary is required</div>
+
+        </div>
+
+
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="position" class="mr-sm-2">Position</label>
+        <select class="custom-select mr-sm-2"
+                id="position" required
+                formControlName="name"
+                [(ngModel)]="empl.position"
+                name="position">
+          <option *ngFor="let position of word">{{position}}</option>
+        </select>
+
+        <div *ngIf="f.submitted &&  position.invalid">
+          Position is required
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-success">Submit</button>
+  </form>
+</div-->
+
+
+
