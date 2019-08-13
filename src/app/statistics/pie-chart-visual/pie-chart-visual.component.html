@@ -1,0 +1,24 @@
+
+<div>
+  <div>
+    <div style="display: block">
+      <canvas baseChart
+              [data]="pieChartData"
+              [labels]="pieChartLabels"
+              [chartType]="pieChartType"
+              [options]="pieChartOptions"
+              [legend]="pieChartLegend"
+              (chartClick)="chartClicked($event)">
+      </canvas>
+    </div>
+  </div>
+</div>
+
+<p>{{clickedElementIndex}}</p>
+
+<p>{{label}}</p>
+<p>{{value}}</p>
+
+
+
+<h6 *ngFor="let e of empl"> {{e | json}} </h6>

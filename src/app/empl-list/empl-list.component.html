@@ -1,0 +1,316 @@
+<div class="container">
+
+  <div class="jumbotron w-100 py-5 mx-auto">
+
+
+    <p class="lead">
+      An exmaple of a CRUD Web Application (Create, Read, Update, Delete) using the Angular 7 on the front end and
+      Spring Boot on the backend.
+      H2 is used for a database.<a class="font-weight-bold" href="https://themestr.app">Themestr.app</a> a customized
+      theme creator for Bootstrap was
+      used for UI elements.
+    </p>
+
+  </div>
+</div>
+
+<div class="container">
+
+
+  <!-- FILTER FUNCTIONALITY -->
+  <div class="input-group">
+    <input type="text" [(ngModel)]="term"
+           class="form-control" placeholder="Search...">
+    <div class="input-group-append">
+      <button class="btn btn-secondary" type="button">
+        <i class="fa fa-search"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<br>
+
+
+<!-- ADD EMPL-->
+
+<div *ngIf="(authority === 'admin' || authority === 'pm')">
+
+    <div class="container">
+      <p>
+        <button class="btn btn-primary" id="bt" type="button" (click)="toggle() && f.resetForm()">
+          {{buttonName}}
+        </button>
+      </p>
+      <!--<ng-container *ngIf="show">-->
+      <div *ngIf="show" class="card card-body">
+
+          <!-- FORM -->
+
+          <div [hidden]="submitted">
+
+          <form (ngSubmit)="f.form.valid && onSubmit(newEmpl) "
+                #f="ngForm" novalidate>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="name">First Name</label>
+                <input type="text"
+                       class="form-control"
+                       id="newEmplname"
+                       required
+                       [(ngModel)]='newEmpl.name'
+                       name="name"
+                       [pattern]="nameRegex"
+                       #name="ngModel">
+
+
+                <div *ngIf="f.submitted && name.invalid">
+                  <div *ngIf="name.errors.required">Name is required</div>
+                  <div *ngIf="name.errors.pattern">
+                    Name is not valid.
+                  </div>
+                </div>
+
+
+              </div>
+
+              <div class="form-group col-md-6">
+                <label for="lastName">Last Name</label>
+                <input type="text"
+                       class="form-control"
+                       id="newEmpllastName"
+                       required
+                       [(ngModel)]="newEmpl.lastName"
+                       name="lastName"
+                       [pattern]="lastNameRegex"
+                       #lastName="ngModel">
+
+                <div *ngIf="f.submitted && lastName.invalid">
+                  <div *ngIf="lastName.errors.required">Last name is required</div>
+                  <div *ngIf="lastName.errors.pattern">
+                    Name is not valid.
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="form-group col-md-6">
+                <label for="salary">Salary:</label>
+                <input type="text" class="form-control"
+                       id="newEmplsalary"
+                       required
+                       [(ngModel)]="newEmpl.salary"
+                       [pattern]="salaryRegexExceedAmount"
+
+                       name="salary"
+                       #salary="ngModel">
+
+                <div *ngIf="f.submitted &&  salary.invalid">
+                  <div *ngIf="salary.errors.required">Salary is required</div>
+                  <div *ngIf="salary.errors.pattern"> Salary is not valid</div>
+                </div>
+
+
+              </div>
+
+              <div class="form-group col-md-6">
+                <label for="position" class="mr-sm-2">Position</label>
+                <select class="custom-select mr-sm-2"
+                        id="newEmplposition" required
+                        #position="ngModel"
+                        [(ngModel)]="newEmpl.position"
+                        name="position">
+                  <option *ngFor="let position of word">{{position}}</option>
+                </select>
+
+                <div *ngIf="f.submitted &&  position.invalid">
+                  Position is required
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-success">Submit</button>
+          </form>
+          </div>
+
+        </div>
+      <!--</ng-container>-->
+    </div>
+</div>
+
+<!--app-empl-new></app-empl-new-->
+
+
+<div class="container">
+
+  <table class="table table-sm">
+    <thead>
+    <tr>
+      <th>Id</th>
+      <th>Created at</th>
+      <th>Name</th>
+      <th>Last name</th>
+      <th>Salary</th>
+      <th>Position</th>
+      <th></th>
+      <th></th>
+
+
+    </tr>
+    </thead>
+    <tbody>
+
+
+    <tr *ngFor="let empl of employees
+       | async
+       | filter: term
+       | paginate: { itemsPerPage: 10, currentPage: p }">
+
+      <td>{{empl.id}}</td>
+      <td>{{empl.created}}</td>
+      <td>{{empl.name}}</td>
+      <td>{{empl.lastName}}</td>
+      <td>${{empl.salary}}</td>
+      <td>{{empl.position}}</td>
+
+
+      <td *ngIf="(authority === 'admin' || authority === 'pm')">
+
+        <button (click)="getEmployee(empl.id)"
+                class="btn btn-outline-success"
+                data-toggle="modal"
+                data-target="#exampleModalCenter">
+          Update
+        </button>
+      </td>
+
+      <td *ngIf="(authority === 'admin' || authority === 'pm')">
+        <button type="button" class="btn btn-outline-success" data-dismiss="modal" (click)="deleteEmployee(empl.id)">
+          Delete
+        </button>
+
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+           aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centere" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel"></h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Are you sure you want to delete?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary btn-outline-info" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteEmployee(empl.id)">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </tr>
+    </tbody>
+  </table>
+
+</div>
+
+
+
+
+    <div *ngIf="getEmployee">
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+       aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <form #editForm="ngForm" (ngSubmit)="f.form.valid && saveChanges(empl)">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="name">Name</label>
+                <input type="text"
+                       class="form-control"
+                       id="name"
+                       name="name"
+                       pattern="[a-zA-Z ]*"
+                       [(ngModel)]="empl.name">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="lastname">Last name</label>
+                <input type="text"
+                       class="form-control"
+                       name="lastName"
+                       id="lastname"
+                       [(ngModel)]="empl.lastName">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="salary">Salary</label>
+              <input type="text"
+                     class="form-control"
+                     id="salary"
+                     name="salary"
+                     #salary="ngModel"
+                     [pattern]="salaryRegexExceedAmount"
+                     [(ngModel)]="empl.salary">
+
+            </div>
+
+
+
+            <div class="form-group">
+              <label for="position"> Position </label>
+
+              <select class="custom-select mr-sm-2"
+                      id="position" required
+                      #position="ngModel"
+                      class="form-control"
+                      [(ngModel)]="empl.position"
+                      name="position">
+                <option *ngFor="let position of word">{{position}}</option>
+              </select>
+
+            </div>
+
+            <div class="modal-footer">
+              <button type="reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+              <button (keypress)="keyPress($event)"
+                      (click)="saveChanges(empl)" type="submit" class="btn btn-primary" data-dismiss="modal">Save
+                changes
+              </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+
+
+<script>
+  $("#more").click(function(e){
+    e.preventDefault();
+    $("#moreField").slideToggle();
+  });
+</script>

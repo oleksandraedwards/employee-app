@@ -1,0 +1,79 @@
+<h3>Users</h3>
+
+<div class="container">
+
+
+  <table class="table table-sm">
+    <thead>
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th></th>
+      <th></th>
+
+
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr *ngFor="let user of users
+    | paginate: { itemsPerPage: 10, currentPage: p }"
+        [class.selected]="user.id === selectedUser">
+
+
+      <td>{{user.id}}</td>
+      <td>{{user.name}}</td>
+      <td>{{user.username}}</td>
+      <td>{{user.email}}</td>
+
+
+      <td *ngFor="let role of user.roles">
+        <div *ngIf="!dropDown">{{role.name}}</div>
+
+
+        <div *ngIf="dropDown">
+
+
+
+          <select [(ngModel)]="role.name">
+            <option *ngFor="let roleSelection of roles"> {{roleSelection.name | json}}</option>
+          </select>
+
+
+          <!--div class="dropup">
+            <button class="dropbtn" *ngFor="let role of user.roles">
+              {{role.name}}
+              &#x25BD;
+            </button>
+
+            <div class="dropup-content">
+              <div *ngFor="let roleSelection of roles">
+              {{roleSelection.name | json}}</div>
+            </div>
+          </div-->
+
+        </div>
+
+      </td>
+
+      <td>
+        <button type="button" class="btn btn-primary" (click)="deleteUser(user)">Delete</button>
+      </td>
+
+      <!--td *ngIf="!dropDown">
+        <button (click)="updateRole(role)" type="button" class="btn btn-outline-primary"> Update Role</button>
+      </td>
+
+      <td *ngIf="dropDown">
+        <button (click)="saveRole(role)" type="button" class="btn btn-outline-primary"> Save Role</button>
+      </td-->
+
+    </tr>
+    </tbody>
+  </table>
+
+
+</div>

@@ -1,0 +1,12 @@
+<div class="stuck">
+<div class="panel panel-primary">
+  <div class="panel-heading">List of Files</div>
+  <div class="list-group" >
+  <div *ngFor="let file of fileUploads | async">
+    <div class="panel-body">
+      <a><app-details-upload class="list-group-item list-group-item-action" [fileUpload]='file'></app-details-upload></a>
+    </div>
+  </div>
+  </div>
+</div>
+</div>
